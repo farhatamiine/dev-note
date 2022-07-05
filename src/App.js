@@ -1,32 +1,20 @@
-import React from 'react';
+import React from "react";
+import Card from "./components/Card/Card";
+
+const Tags = [
+  { title: "mindfullness", color: "#00e676" },
+  { title: "mind", color: "#bbdefb" },
+  { title: "C++", color: "#0d47a1" },
+];
 
 function App() {
   return (
-    <div className="flex flex-col h-full items-center justify-center bg-gray-200 text-gray-700">
-      <div className="flex items-center">
-        <h1 className="text-6xl font-thin tracking-wider">Create React App + Tailwind CSS</h1>
-      </div>
-      <p className="my-6 tracking-wide">
-        Edit <code>src/App.js</code> and save to reload.
-      </p>
-      <div className="mt-6 flex justify-center">
-        <a
-          className="uppercase hover:underline"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-        <a
-          className="ml-10 uppercase hover:underline"
-          href="https://tailwindcss.com"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn Tailwind
-        </a>
-      </div>
+    <div className="w-full p-4">
+      <Card Tags={Tags} title="Mindfullness" icon="🏌️" />
+      <Card Tags={Tags} title="Productivity Tools" icon="🌍" />
+      <Card Tags={Tags} title="Creativity" icon="🏌️" />
+      <Card Tags={Tags} title="Brain Biology" icon="🕺" />
+      <Card Tags={Tags} title="BookShelf" icon="🧾" />
     </div>
   );
 }
