@@ -1,11 +1,10 @@
-import React from "react";
+import { Dropdown } from "flowbite-react";
 import PropTypes from "prop-types";
 import Tag from "../Tag/Tag";
-import { Dropdown } from "flowbite-react";
 
 const Card = ({ title, Tags, icon }) => {
   return (
-    <div className="p-4 box-border cursor-pointer w-72 max-w-sm mb-2 bg-white rounded-lg border border-gray-300 shadow-md hover:bg-gray-100 ">
+    <div className="p-4 box-border cursor-pointer w-auto max-w-sm mb-2 bg-white rounded-lg border border-gray-300 shadow-md hover:bg-gray-100 ">
       <div className="flex items-center justify-between mb-2 ">
         <h5 className="space-x-4 text-lg font-medium tracking-tight text-gray-900 dark:text-white">
           <span className="mr-2">{icon}</span>

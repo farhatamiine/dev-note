@@ -1,217 +1,50 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { Dialog, Menu, Transition } from "@headlessui/react";
-import {
-  ArchiveIcon,
-  BanIcon,
-  BellIcon,
-  FlagIcon,
-  InboxIcon,
-  MenuIcon,
-  PencilAltIcon,
-  UserCircleIcon,
-  XIcon,
-} from "@heroicons/react/outline";
-import { ChevronDownIcon, SearchIcon } from "@heroicons/react/solid";
+import { useAuth0 } from "@auth0/auth0-react";
+import { Dialog, Transition } from "@headlessui/react";
+import { MenuIcon, XIcon } from "@heroicons/react/outline";
+import { Spinner } from "flowbite-react";
 import { Fragment, useState } from "react";
-
-const user = {
-  name: "Whitney Francis",
-  email: "whitney.francis@example.com",
-  imageUrl:
-    "https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-};
+import {
+  IoBulbOutline,
+  IoCalendarOutline,
+  IoFolderOpenOutline,
+  IoHomeOutline,
+  IoNewspaperOutline,
+  IoSettingsOutline,
+} from "react-icons/io5";
 const navigation = [
-  {
-    name: "Inboxes",
-    href: "#",
-    children: [
-      { name: "Technical Support", href: "#" },
-      { name: "Sales", href: "#" },
-      { name: "General", href: "#" },
-    ],
-  },
-  { name: "Reporting", href: "#", children: [] },
-  { name: "Settings", href: "#", children: [] },
-];
-const sidebarNavigation = [
-  { name: "Open", href: "#", icon: InboxIcon, current: true },
-  { name: "Archive", href: "#", icon: ArchiveIcon, current: false },
-  { name: "Customers", href: "#", icon: UserCircleIcon, current: false },
-  { name: "Flagged", href: "#", icon: FlagIcon, current: false },
-  { name: "Spam", href: "#", icon: BanIcon, current: false },
-  { name: "Drafts", href: "#", icon: PencilAltIcon, current: false },
-];
-const userNavigation = [
-  { name: "Your Profile", href: "#" },
-  { name: "Sign out", href: "#" },
+  { name: "Home", href: "#", icon: IoHomeOutline, current: true },
+  { name: "Callendar", href: "#", icon: IoCalendarOutline, current: false },
+  { name: "Ideas", href: "#", icon: IoBulbOutline, current: false },
+  { name: "Notes", href: "#", icon: IoNewspaperOutline, current: false },
+  { name: "Folder", href: "#", icon: IoFolderOpenOutline, current: false },
+  { name: "Settings", href: "#", icon: IoSettingsOutline, current: false },
 ];
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
+
 const MainLayout = ({ children }) => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { user, isLoading } = useAuth0();
+  const Tags = [
+    { title: "mindfullness", color: "#00e676" },
+    { title: "mind", color: "#bbdefb" },
+    { title: "C++", color: "#0d47a1" },
+  ];
 
   return (
     <>
-      <div className="h-full flex flex-col">
-        {/* Top nav*/}
-        <header className="flex-shrink-0 relative h-16 bg-white flex items-center">
-          {/* Logo area */}
-          <div className="absolute inset-y-0 left-0 md:static md:flex-shrink-0">
-            <a
-              href="#"
-              className="flex items-center justify-center h-16 w-16 bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-600 md:w-20"
-            >
-              <img
-                className="h-8 w-auto"
-                src="https://tailwindui.com/img/logos/workflow-mark.svg?color=white"
-                alt="Workflow"
-              />
-            </a>
-          </div>
-
-          {/* Picker area */}
-          <div className="mx-auto md:hidden">
-            <div className="relative">
-              <label htmlFor="inbox-select" className="sr-only">
-                Choose inbox
-              </label>
-              <select
-                id="inbox-select"
-                className="rounded-md border-0 bg-none pl-3 pr-8 text-base font-medium text-gray-900 focus:ring-2 focus:ring-indigo-600"
-                defaultValue={
-                  sidebarNavigation.find((item) => item.current).name
-                }
-              >
-                {sidebarNavigation.map((item) => (
-                  <option key={item.name}>{item.name}</option>
-                ))}
-              </select>
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center justify-center pr-2">
-                <ChevronDownIcon
-                  className="h-5 w-5 text-gray-500"
-                  aria-hidden="true"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Menu button area */}
-          <div className="absolute inset-y-0 right-0 pr-4 flex items-center sm:pr-6 md:hidden">
-            {/* Mobile menu button */}
-            <button
-              type="button"
-              className="-mr-2 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-600"
-              onClick={() => setMobileMenuOpen(true)}
-            >
-              <span className="sr-only">Open main menu</span>
-              <MenuIcon className="block h-6 w-6" aria-hidden="true" />
-            </button>
-          </div>
-
-          {/* Desktop nav area */}
-          <div className="hidden md:min-w-0 md:flex-1 md:flex md:items-center md:justify-between">
-            <div className="min-w-0 flex-1">
-              <div className="max-w-2xl relative text-gray-400 focus-within:text-gray-500">
-                <label htmlFor="desktop-search" className="sr-only">
-                  Search
-                </label>
-                <input
-                  id="desktop-search"
-                  type="search"
-                  placeholder="Search"
-                  className="block w-full border-transparent pl-12 placeholder-gray-500 focus:border-transparent sm:text-sm focus:ring-0"
-                />
-                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center justify-center pl-4">
-                  <SearchIcon className="h-5 w-5" aria-hidden="true" />
-                </div>
-              </div>
-            </div>
-            <div className="ml-10 pr-4 flex-shrink-0 flex items-center space-x-10">
-              <nav aria-label="Global" className="flex space-x-10">
-                <a href="#" className="text-sm font-medium text-gray-900">
-                  Inboxes
-                </a>
-                <a href="#" className="text-sm font-medium text-gray-900">
-                  Reporting
-                </a>
-                <a href="#" className="text-sm font-medium text-gray-900">
-                  Settings
-                </a>
-              </nav>
-              <div className="flex items-center space-x-8">
-                <span className="inline-flex">
-                  <a
-                    href="#"
-                    className="-mx-1 bg-white p-1 rounded-full text-gray-400 hover:text-gray-500"
-                  >
-                    <span className="sr-only">View notifications</span>
-                    <BellIcon className="h-6 w-6" aria-hidden="true" />
-                  </a>
-                </span>
-
-                <Menu as="div" className="relative inline-block text-left">
-                  <Menu.Button className="bg-white rounded-full flex text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600">
-                    <span className="sr-only">Open user menu</span>
-                    <img
-                      className="h-8 w-8 rounded-full"
-                      src={user.imageUrl}
-                      alt=""
-                    />
-                  </Menu.Button>
-
-                  <Transition
-                    as={Fragment}
-                    enter="transition ease-out duration-100"
-                    enterFrom="transform opacity-0 scale-95"
-                    enterTo="transform opacity-100 scale-100"
-                    leave="transition ease-in duration-75"
-                    leaveFrom="transform opacity-100 scale-100"
-                    leaveTo="transform opacity-0 scale-95"
-                  >
-                    <Menu.Items className="origin-top-right absolute z-30 right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-                      <div className="py-1">
-                        <Menu.Item>
-                          {({ active }) => (
-                            <a
-                              href="#"
-                              className={classNames(
-                                active ? "bg-gray-100" : "",
-                                "block px-4 py-2 text-sm text-gray-700"
-                              )}
-                            >
-                              Your Profile
-                            </a>
-                          )}
-                        </Menu.Item>
-                        <Menu.Item>
-                          {({ active }) => (
-                            <a
-                              href="#"
-                              className={classNames(
-                                active ? "bg-gray-100" : "",
-                                "block px-4 py-2 text-sm text-gray-700"
-                              )}
-                            >
-                              Sign Out
-                            </a>
-                          )}
-                        </Menu.Item>
-                      </div>
-                    </Menu.Items>
-                  </Transition>
-                </Menu>
-              </div>
-            </div>
-          </div>
-
-          {/* Mobile menu, show/hide this `div` based on menu open/closed state */}
-          <Transition.Root show={mobileMenuOpen} as={Fragment}>
+      {isLoading ? (
+        <Spinner aria-label="Extra large spinner example" size="xl" />
+      ) : (
+        <div>
+          <Transition.Root show={sidebarOpen} as={Fragment}>
             <Dialog
               as="div"
-              className="fixed inset-0 z-40 md:hidden"
-              onClose={setMobileMenuOpen}
+              className="fixed inset-0 flex z-40 md:hidden"
+              onClose={setSidebarOpen}
             >
               <Transition.Child
                 as={Fragment}
@@ -222,167 +55,193 @@ const MainLayout = ({ children }) => {
                 leaveFrom="opacity-100"
                 leaveTo="opacity-0"
               >
-                <Dialog.Overlay className="hidden sm:block sm:fixed sm:inset-0 sm:bg-gray-600 sm:bg-opacity-75" />
+                <Dialog.Overlay className="fixed inset-0 bg-gray-600 bg-opacity-75" />
               </Transition.Child>
-
               <Transition.Child
                 as={Fragment}
-                enter="transition ease-out duration-150 sm:ease-in-out sm:duration-300"
-                enterFrom="transform opacity-0 scale-110 sm:translate-x-full sm:scale-100 sm:opacity-100"
-                enterTo="transform opacity-100 scale-100  sm:translate-x-0 sm:scale-100 sm:opacity-100"
-                leave="transition ease-in duration-150 sm:ease-in-out sm:duration-300"
-                leaveFrom="transform opacity-100 scale-100 sm:translate-x-0 sm:scale-100 sm:opacity-100"
-                leaveTo="transform opacity-0 scale-110  sm:translate-x-full sm:scale-100 sm:opacity-100"
+                enter="transition ease-in-out duration-300 transform"
+                enterFrom="-translate-x-full"
+                enterTo="translate-x-0"
+                leave="transition ease-in-out duration-300 transform"
+                leaveFrom="translate-x-0"
+                leaveTo="-translate-x-full"
               >
-                <nav
-                  className="fixed z-40 inset-0 h-full w-full bg-white sm:inset-y-0 sm:left-auto sm:right-0 sm:max-w-sm sm:w-full sm:shadow-lg"
-                  aria-label="Global"
-                >
-                  <div className="h-16 flex items-center justify-between px-4 sm:px-6">
-                    <a href="#">
+                <div className="relative flex-1 flex flex-col max-w-xs w-full bg-green-800">
+                  <Transition.Child
+                    as={Fragment}
+                    enter="ease-in-out duration-300"
+                    enterFrom="opacity-0"
+                    enterTo="opacity-100"
+                    leave="ease-in-out duration-300"
+                    leaveFrom="opacity-100"
+                    leaveTo="opacity-0"
+                  >
+                    <div className="absolute top-0 right-0 -mr-12 pt-2">
+                      <button
+                        type="button"
+                        className="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+                        onClick={() => setSidebarOpen(false)}
+                      >
+                        <span className="sr-only">Close sidebar</span>
+                        <XIcon
+                          className="h-6 w-6 text-white"
+                          aria-hidden="true"
+                        />
+                      </button>
+                    </div>
+                  </Transition.Child>
+                  <div className="flex-1 h-0 pt-5 pb-4 overflow-y-auto">
+                    <div className="flex-shrink-0 flex items-center px-4">
                       <img
-                        className="block h-8 w-auto"
-                        src="https://tailwindui.com/img/logos/workflow-mark.svg?color=indigo&shade=500"
+                        className="h-8 w-auto"
+                        src="https://tailwindui.com/img/logos/workflow-logo-indigo-500-mark-white-text.svg"
                         alt="Workflow"
                       />
-                    </a>
-                    <button
-                      type="button"
-                      className="-mr-2 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-600"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      <span className="sr-only">Close main menu</span>
-                      <XIcon className="block h-6 w-6" aria-hidden="true" />
-                    </button>
-                  </div>
-                  <div className="mt-2 max-w-8xl mx-auto px-4 sm:px-6">
-                    <div className="relative text-gray-400 focus-within:text-gray-500">
-                      <label htmlFor="mobile-search" className="sr-only">
-                        Search all inboxes
-                      </label>
-                      <input
-                        id="mobile-search"
-                        type="search"
-                        placeholder="Search all inboxes"
-                        className="block w-full border-gray-300 rounded-md pl-10 placeholder-gray-500 focus:border-indigo-600 focus:ring-indigo-600"
-                      />
-                      <div className="absolute inset-y-0 left-0 flex items-center justify-center pl-3">
-                        <SearchIcon className="h-5 w-5" aria-hidden="true" />
-                      </div>
                     </div>
-                  </div>
-                  <div className="max-w-8xl mx-auto py-3 px-2 sm:px-4">
-                    {navigation.map((item) => (
-                      <Fragment key={item.name}>
-                        <a
-                          href={item.href}
-                          className="block rounded-md py-2 px-3 text-base font-medium text-gray-900 hover:bg-gray-100"
-                        >
-                          {item.name}
-                        </a>
-                        {item.children.map((child) => (
-                          <a
-                            key={child.name}
-                            href={child.href}
-                            className="block rounded-md py-2 pl-5 pr-3 text-base font-medium text-gray-500 hover:bg-gray-100"
-                          >
-                            {child.name}
-                          </a>
-                        ))}
-                      </Fragment>
-                    ))}
-                  </div>
-                  <div className="border-t border-gray-200 pt-4 pb-3">
-                    <div className="max-w-8xl mx-auto px-4 flex items-center sm:px-6">
-                      <div className="flex-shrink-0">
-                        <img
-                          className="h-10 w-10 rounded-full"
-                          src={user.imageUrl}
-                          alt=""
-                        />
-                      </div>
-                      <div className="ml-3 min-w-0 flex-1">
-                        <div className="text-base font-medium text-gray-800 truncate">
-                          {user.name}
-                        </div>
-                        <div className="text-sm font-medium text-gray-500 truncate">
-                          {user.email}
-                        </div>
-                      </div>
-                      <a
-                        href="#"
-                        className="ml-auto flex-shrink-0 bg-white p-2 text-gray-400 hover:text-gray-500"
-                      >
-                        <span className="sr-only">View notifications</span>
-                        <BellIcon className="h-6 w-6" aria-hidden="true" />
-                      </a>
-                    </div>
-                    <div className="mt-3 max-w-8xl mx-auto px-2 space-y-1 sm:px-4">
-                      {userNavigation.map((item) => (
+                    <nav className="mt-5 px-2 space-y-1">
+                      {navigation.map((item) => (
                         <a
                           key={item.name}
                           href={item.href}
-                          className="block rounded-md py-2 px-3 text-base font-medium text-gray-900 hover:bg-gray-50"
+                          className={classNames(
+                            item.current
+                              ? "bg-gray-900 text-white"
+                              : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                            "group flex items-center px-2 py-2 text-base font-medium rounded-md"
+                          )}
                         >
+                          <item.icon
+                            className={classNames(
+                              item.current
+                                ? "text-gray-300"
+                                : "text-[#b1c2c1] hover:bg-[#3d6157] hover:text-white",
+                              "mr-4 flex-shrink-0 h-6 w-6"
+                            )}
+                            aria-hidden="true"
+                          />
                           {item.name}
                         </a>
                       ))}
-                    </div>
+                    </nav>
                   </div>
-                </nav>
+                  <div className="flex-shrink-0 flex bg-green-800 p-4">
+                    <a href="#" className="flex-shrink-0 group block">
+                      <div className="flex items-center">
+                        <div>
+                          <img
+                            className="inline-block h-10 w-10 rounded-full"
+                            src={user.picture}
+                            alt=""
+                          />
+                        </div>
+                        <div className="ml-3">
+                          <p className="text-base font-medium text-white">
+                            {user.name}
+                          </p>
+                          <p className="text-sm font-medium text-gray-400 group-hover:text-gray-300">
+                            View profile
+                          </p>
+                        </div>
+                      </div>
+                    </a>
+                  </div>
+                </div>
               </Transition.Child>
+              <div className="flex-shrink-0 w-14">
+                {/* Force sidebar to shrink to fit close icon */}
+              </div>
             </Dialog>
           </Transition.Root>
-        </header>
 
-        {/* Bottom section */}
-        <div className="min-h-0 flex-1 flex overflow-hidden">
-          {/* Narrow sidebar*/}
-          <nav
-            aria-label="Sidebar"
-            className="hidden md:block md:flex-shrink-0 md:bg-gray-800 md:overflow-y-auto"
-          >
-            <div className="relative w-20 flex flex-col p-3 space-y-3">
-              {sidebarNavigation.map((item) => (
-                <a
-                  key={item.name}
-                  href={item.href}
-                  className={classNames(
-                    item.current
-                      ? "bg-gray-900 text-white"
-                      : "text-gray-400 hover:bg-gray-700",
-                    "flex-shrink-0 inline-flex items-center justify-center h-14 w-14 rounded-lg"
-                  )}
-                >
-                  <span className="sr-only">{item.name}</span>
-                  <item.icon className="h-6 w-6" aria-hidden="true" />
-                </a>
-              ))}
-            </div>
-          </nav>
-
-          {/* Main area */}
-          <main className="min-w-0 flex-1 border-t border-gray-200 lg:flex">
-            {/* Primary column */}
-            <section
-              aria-labelledby="primary-heading"
-              className="min-w-0 flex-1 h-full flex flex-col overflow-y-auto lg:order-last"
-            >
-              <h1 id="primary-heading" className="sr-only">
-                Home
-              </h1>
-              {/* Your content */}
-            </section>
-
-            {/* Secondary column (hidden on smaller screens) */}
-            <aside className="hidden lg:block lg:flex-shrink-0 lg:order-first">
-              <div className="h-full relative flex flex-col w-96 border-r border-gray-200 bg-gray-100 overflow-y-auto">
-                {/* Your content */}
+          {/* Static sidebar for desktop */}
+          <div className="hidden md:flex md:w-80 md:flex-col md:fixed md:inset-y-0">
+            {/* Sidebar component, swap this element with another sidebar if you like */}
+            <div className="flex-1 flex flex-col min-h-0 bg-[#49756a]">
+              <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
+                <div className="flex items-center justify-center flex-shrink-0 px-4">
+                  <h2 className="uppercase font-semibold text-white text-xl">
+                    My Daily Dev notes
+                  </h2>
+                </div>
+                <nav className="mt-5 flex-1 px-0 space-y-2">
+                  {navigation.map((item) => (
+                    <a
+                      key={item.name}
+                      href={item.href}
+                      className={classNames(
+                        item.current
+                          ? "bg-green-900 text-white"
+                          : "text-gray-300 hover:bg-[#3d6157] hover:text-white",
+                        "group flex items-center px-5 py-5 text-lg font-medium "
+                      )}
+                    >
+                      <item.icon
+                        className={classNames(
+                          item.current
+                            ? "text-white"
+                            : "text-gray-300 group-hover:text-gray-300",
+                          "mr-3 flex-shrink-0 h-7 w-7"
+                        )}
+                        aria-hidden="true"
+                      />
+                      {item.name}
+                    </a>
+                  ))}
+                </nav>
               </div>
-            </aside>
-          </main>
+              <div className="flex-shrink-0 flex bg-green-800 p-4">
+                <a href="#" className="flex-shrink-0 w-full group block">
+                  <div className="flex items-center">
+                    <div>
+                      <img
+                        className="inline-block h-9 w-9 rounded-full"
+                        src={user.picture}
+                        alt=""
+                      />
+                    </div>
+                    <div className="ml-3">
+                      <p className="text-sm font-medium text-white">
+                        {user.name}
+                      </p>
+                      <p className="text-xs font-medium text-gray-300 group-hover:text-gray-200">
+                        View profile
+                      </p>
+                    </div>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div className="md:pl-80 flex flex-col flex-1">
+            <div className="sticky top-0 z-10 md:hidden pl-1 pt-1 sm:pl-3 sm:pt-3 bg-gray-100">
+              <button
+                type="button"
+                className="-ml-0.5 -mt-0.5 h-12 w-12 inline-flex items-center justify-center rounded-md text-gray-500 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+                onClick={() => setSidebarOpen(true)}
+              >
+                <span className="sr-only">Open sidebar</span>
+                <MenuIcon className="h-6 w-6" aria-hidden="true" />
+              </button>
+            </div>
+            <main className="flex-1">
+              <div className="py-6">
+                <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
+                  <h1 className="text-2xl font-semibold text-gray-900">
+                    Dashboard
+                  </h1>
+                </div>
+                <div className="max-w-full mx-auto px-4 sm:px-6 md:px-8">
+                  {/* Replace with your content */}
+                  <div className="py-4">
+                    <div className="border-4 border-dashed border-gray-200 rounded-lg h-96" />
+                  </div>
+                  {/* /End replace */}
+                </div>
+              </div>
+            </main>
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 };

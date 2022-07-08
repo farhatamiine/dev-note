@@ -1,13 +1,23 @@
+import { Auth0Provider } from "@auth0/auth0-react";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./css/index.css";
+import { BrowserRouter } from "react-router-dom";
 import App from "./App";
+import "./css/index.css";
 import * as serviceWorkerRegistration from "./service/serviceWorkerRegistration";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <App />
+    <Auth0Provider
+      domain="dev-b0qlmps8.us.auth0.com"
+      clientId="LZxMyVBViqRZ5KTMjLmRf1iDqeyTBhot"
+      redirectUri={window.location.origin}
+    >
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </Auth0Provider>
   </React.StrictMode>
 );
 
