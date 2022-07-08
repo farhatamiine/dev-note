@@ -1,6 +1,7 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import MainLayout from "./layouts/MainLayouts/MainLayout";
 import HomePage from "./Pages/HomePage/HomePage";
 
@@ -15,8 +16,11 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/dashboard" element={<MainLayout />} />
+        <Route path="/" exact element={<HomePage />} />
+        <Route
+          path="/dashboard"
+          element={<ProtectedRoute component={MainLayout} />}
+        />
         <Route
           path="*"
           element={

@@ -9,6 +9,7 @@ import {
   IoCalendarOutline,
   IoFolderOpenOutline,
   IoHomeOutline,
+  IoLogOutOutline,
   IoNewspaperOutline,
   IoSettingsOutline,
 } from "react-icons/io5";
@@ -27,7 +28,7 @@ function classNames(...classes) {
 
 const MainLayout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { user, isLoading } = useAuth0();
+  const { user, isLoading, logout } = useAuth0();
   const Tags = [
     { title: "mindfullness", color: "#00e676" },
     { title: "mind", color: "#bbdefb" },
@@ -122,6 +123,22 @@ const MainLayout = ({ children }) => {
                           {item.name}
                         </a>
                       ))}
+                      <a
+                        onClick={() =>
+                          logout({ returnTo: window.location.origin })
+                        }
+                        className={classNames(
+                          "text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-base font-medium rounded-md"
+                        )}
+                      >
+                        <IoSettingsOutline
+                          className={classNames(
+                            "text-[#b1c2c1] hover:bg-[#3d6157] hover:text-white mr-4 flex-shrink-0 h-6 w-6"
+                          )}
+                          aria-hidden="true"
+                        />
+                        Logout
+                      </a>
                     </nav>
                   </div>
                   <div className="flex-shrink-0 flex bg-green-800 p-4">
@@ -187,6 +204,20 @@ const MainLayout = ({ children }) => {
                       {item.name}
                     </a>
                   ))}
+                  <a
+                    onClick={() => logout({ returnTo: window.location.origin })}
+                    className={classNames(
+                      "text-gray-300 cursor-pointer hover:bg-[#3d6157] hover:text-white group flex items-center px-5 py-5 text-lg font-medium "
+                    )}
+                  >
+                    <IoLogOutOutline
+                      className={classNames(
+                        "text-[#b1c2c1] hover:bg-[#3d6157] hover:text-white mr-3 flex-shrink-0 h-7 w-7"
+                      )}
+                      aria-hidden="true"
+                    />
+                    Logout
+                  </a>
                 </nav>
               </div>
               <div className="flex-shrink-0 flex bg-green-800 p-4">
