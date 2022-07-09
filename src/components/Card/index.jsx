@@ -1,6 +1,6 @@
 import { Dropdown } from "flowbite-react";
 import PropTypes from "prop-types";
-import Tag from "../Tag/Tag";
+import Tag from "../Tag";
 
 const Card = ({ title, Tags, icon }) => {
   return (

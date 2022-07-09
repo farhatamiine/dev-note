@@ -13,14 +13,7 @@ import {
   IoNewspaperOutline,
   IoSettingsOutline,
 } from "react-icons/io5";
-const navigation = [
-  { name: "Home", href: "#", icon: IoHomeOutline, current: true },
-  { name: "Callendar", href: "#", icon: IoCalendarOutline, current: false },
-  { name: "Ideas", href: "#", icon: IoBulbOutline, current: false },
-  { name: "Notes", href: "#", icon: IoNewspaperOutline, current: false },
-  { name: "Folder", href: "#", icon: IoFolderOpenOutline, current: false },
-  { name: "Settings", href: "#", icon: IoSettingsOutline, current: false },
-];
+import { Link, Outlet, useLocation } from "react-router-dom";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -29,10 +22,45 @@ function classNames(...classes) {
 const MainLayout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { user, isLoading, logout } = useAuth0();
-  const Tags = [
-    { title: "mindfullness", color: "#00e676" },
-    { title: "mind", color: "#bbdefb" },
-    { title: "C++", color: "#0d47a1" },
+  const location = useLocation();
+
+  const navigation = [
+    {
+      name: "Home",
+      link: "dashboard",
+      icon: IoHomeOutline,
+      current: location.pathname.slice(11).match("dashboard"),
+    },
+    {
+      name: "Callendar",
+      link: "callendar",
+      icon: IoCalendarOutline,
+      current: location.pathname.slice(11).match("callendar"),
+    },
+    {
+      name: "Ideas",
+      link: "idea",
+      icon: IoBulbOutline,
+      current: location.pathname.slice(11).match("idea"),
+    },
+    {
+      name: "Notes",
+      link: "notes",
+      icon: IoNewspaperOutline,
+      current: location.pathname.slice(11).match("notes"),
+    },
+    {
+      name: "Folder",
+      link: "folder",
+      icon: IoFolderOpenOutline,
+      current: location.pathname.slice(11).match("folder"),
+    },
+    {
+      name: "Settings",
+      link: "settings",
+      icon: IoSettingsOutline,
+      current: location.pathname.slice(11).match("settings"),
+    },
   ];
 
   return (
@@ -101,9 +129,9 @@ const MainLayout = ({ children }) => {
                     </div>
                     <nav className="mt-5 px-2 space-y-1">
                       {navigation.map((item) => (
-                        <a
+                        <Link
                           key={item.name}
-                          href={item.href}
+                          to={item.link}
                           className={classNames(
                             item.current
                               ? "bg-gray-900 text-white"
@@ -121,7 +149,7 @@ const MainLayout = ({ children }) => {
                             aria-hidden="true"
                           />
                           {item.name}
-                        </a>
+                        </Link>
                       ))}
                       <a
                         onClick={() =>
@@ -182,9 +210,9 @@ const MainLayout = ({ children }) => {
                 </div>
                 <nav className="mt-5 flex-1 px-0 space-y-2">
                   {navigation.map((item) => (
-                    <a
+                    <Link
                       key={item.name}
-                      href={item.href}
+                      to={item.link}
                       className={classNames(
                         item.current
                           ? "bg-green-900 text-white"
@@ -202,7 +230,7 @@ const MainLayout = ({ children }) => {
                         aria-hidden="true"
                       />
                       {item.name}
-                    </a>
+                    </Link>
                   ))}
                   <a
                     onClick={() => logout({ returnTo: window.location.origin })}
@@ -255,20 +283,7 @@ const MainLayout = ({ children }) => {
               </button>
             </div>
             <main className="flex-1">
-              <div className="py-6">
-                <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
-                  <h1 className="text-2xl font-semibold text-gray-900">
-                    Dashboard
-                  </h1>
-                </div>
-                <div className="max-w-full mx-auto px-4 sm:px-6 md:px-8">
-                  {/* Replace with your content */}
-                  <div className="py-4">
-                    <div className="border-4 border-dashed border-gray-200 rounded-lg h-96" />
-                  </div>
-                  {/* /End replace */}
-                </div>
-              </div>
+              <Outlet />
             </main>
           </div>
         </div>
