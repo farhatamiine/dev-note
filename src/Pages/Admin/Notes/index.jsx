@@ -4,11 +4,7 @@ import EmptyState from "../../../components/EmptyState";
 
 export const Notes = () => {
   const editorRef = useRef(null);
-  const log = () => {
-    if (editorRef.current) {
-      console.log(editorRef.current.getContent());
-    }
-  };
+
   return (
     <div className="py-6">
       <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
