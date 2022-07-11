@@ -32,3 +32,8 @@ export const notesApi = createApi({
     })
 
 })
+
+export const {
+    useGetAllQuery,
+    useCreateNoteMutation
+} = notesApi
