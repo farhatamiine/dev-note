@@ -1,35 +1,42 @@
 import {Editor} from "@tinymce/tinymce-react";
-import {useEffect, useRef, useState} from "react";
+import {Fragment, useEffect, useRef, useState} from "react";
 import EmptyState from "../../../components/EmptyState";
 import style from './style.module.css'
 import Card from "../../../components/Card";
 import {VscNotebook} from "react-icons/vsc";
+import {notesApi} from "../../../redux/store/store";
 
 
 export const Notes = () => {
     const editorRef = useRef(null);
+    const {data: notes} = notesApi.useGetAllQuery();
+    const [addNotes] = notesApi.useCreateNoteMutation();
     const [value, setValue] = useState("Tesla Illustrator Project" ?? '');
+    useEffect(() => {
+        document.title = "List of my notes"
+    }, [])
 
-    const NotesData = [
-        {
-            id: 1,
-            title: "Tesla Illustrator Project",
-            description: "Repeating the project and documenting the creative process will help me to improve."
-        },
-        {
-            id: 2,
-            title: "Tesla Illustrator Project",
-            description: "Repeating the project and documenting the creative process will help me to improve."
-        },
-        {
-            id: 3,
-            title: "Tesla Illustrator Project",
-            description: "Repeating the project and documenting the creative process will help me to improve."
-        },
-    ]
-    const setEditorValue =(id) => {
-        setValue(id.toString())
+
+    const setEditorValue = (note) => {
+        setValue(JSON.stringify(note))
     }
+
+    function addNewNotes() {
+        console.log("Click")
+        const notes = {
+            "mutations": [
+                {
+                    "create": {
+                        "title": "Postman create documents 2",
+                        "_type": "notes",
+                        "description": "Adding new data 2"
+                    }
+                }
+            ]
+        }
+        addNotes(notes)
+    }
+
     return (
         <div className="py-6">
             <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
@@ -49,15 +56,21 @@ export const Notes = () => {
                                         My Notes
                                     </h2>
                                 </div>
-                                {/*<div className="bg-white p-4 mt-5">*/}
-                                {/*    <EmptyState stateName={"Notes"}/>*/}
-                                {/*</div>*/}
-                                <div className={`h-[52rem] overflow-y-scroll ${style.noteCardContainer}`}>
-                                    {NotesData.map(({id, description, title}) => {
+                                <div className={`
+        h - [52rem]
+        overflow - y - scroll ${style.noteCardContainer}`}>
+                                    {notes?.result?.map((note) => {
                                         return (
-                                            <Card id={id} onClick={() => setEditorValue(id)} description={description} title={title}/>
+                                            <Fragment key={note._id}>
+                                                <Card id={note._id} onClick={() => setEditorValue(note)}
+                                                      description={note.description}
+                                                      title={note.title}/>
+                                            </Fragment>
                                         )
                                     })}
+                                </div>
+                                <div className={""}>
+                                    <button className={""} onClick={addNewNotes}>Add New Notes</button>
                                 </div>
                             </div>
                         </section>
@@ -67,7 +80,7 @@ export const Notes = () => {
                             <h2 className="sr-only" id="section-1-title">
                                 Section title
                             </h2>
-                            <div className="rounded-lg  overflow-scroll ">
+                            <div className="rounded-lg  ">
                                 <Editor
                                     id="Editor"
                                     onEditorChange={(newValue, editor) => setValue(newValue)}
